@@ -1,0 +1,7 @@
+*.pdf
+.env
+tika-server.jar
+nenv
+output_files
+__pycache__
+*.pyc

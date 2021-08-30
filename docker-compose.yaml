@@ -1,0 +1,38 @@
+version: '3.5'
+
+services:
+  rabbitmq:
+    build: ./app/rabbitmq
+    restart: always
+    expose:
+      - "5672"
+      - "15672"
+    ports:
+      - '5673:5672'
+      - '15673:15672'
+
+  postgres:
+    container_name: cv_postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      PGDATA: /data/postgres
+    volumes:
+       - ./database/data/postgres:/data/postgres
+    ports:
+      - "5434:5432"
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: cv_pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    volumes:
+       - ./database/data/pgadmin:/root/.pgadmin
+       - ./database/data/storage:/var/lib/pgadmin/storage
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    restart: unless-stopped
