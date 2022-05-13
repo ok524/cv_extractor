@@ -28,18 +28,40 @@ Process:
 ## Development
 
 ```
-cd app/
+cd cv_extractor/app
 source nenv/bin/activate
 ```
 
 1. API app
 ```
+cd cv_extractor/app
 uvicorn main:app --reload
 ```
 
 2. RabbitMQ + Database
 ```
+cd cv_extractor
 docker-compose --env-file ./database/.env up
+```
+
+3. Worker for write db
+```
+cd cv_extractor/app
+python3 dbworker/main.py
+```
+
+4. Worker for extract info
+```
+export PYTHONIOENCODING=utf8
+export TIKA_SERVER_JAR="file:///omar_prj/app/202108_tool_convert_plaintext/vgdocx/tika-server.jar"
+cd cv_extractor/app
+python3 cvworker/main.py
+```
+
+5. Web
+```
+cd cv_extractor/web
+yarn start
 ```
 
 ### Architecture diagram

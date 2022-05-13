@@ -15,6 +15,7 @@ import logging.config
 import argparse
 
 import tika
+tika.initVM()
 from tika import parser as tika_parser
 
 def makeplaintext():
@@ -64,6 +65,7 @@ def convert2text(filepath, filename, hash_val="", outputfolder="./output_files")
         parsed = tika_parser.from_file(filepath)
         print(f"\n> Metadata:\n{parsed['metadata']}\n\n")
         text = parsed["content"]
+        # print(f"\n{text}\n\n")
         text = text.strip("\n")
     except Exception as e:
         stats["STATUS"] = "Failed"
@@ -132,7 +134,7 @@ if __name__ == "__main__":
     outputfolder = variables['PLAINTEXT_FOLDER']
 
     if outputfolder is None:
-        outputfolder="./output_files"
+        outputfolder="./data/output_files"
     if not os.path.exists(outputfolder):
         os.makedirs(outputfolder)
 

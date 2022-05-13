@@ -29,8 +29,11 @@ class Extractor():
 
     def __init__(self, path_txt):
         self.path_txt = path_txt
-        with open(self.path_txt, mode='r') as f:
-            self.atext = f.read()
+        try:
+            with open(self.path_txt, mode='r') as f:
+                self.atext = f.read()
+        except Exception as err:
+            print(f"[Error] Extractor::__init__ {err}\n{self.path_txt}")
 
     def run_all(self):
         entity = self.entity_extract()

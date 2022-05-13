@@ -21,8 +21,15 @@ from extract.main import extract, Extractor
 app = FastAPI()
 
 origins = [
+    "*",
     "http://localhost",
     "http://localhost:3001",
+    "http://localhost:3000",
+    "http://localhost:8000",
+    "http://127.0.0.1",
+    "http://127.0.0.1:3001",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:8000",
 ]
 
 app.add_middleware(
@@ -42,8 +49,8 @@ paths = {
 
 @app.get("/")
 async def read_root():
-    a = Extractor('a')
-    b = Extractor('>bbbbbb')
+    # a = Extractor('a')
+    # b = Extractor('>bbbbbb')
     return {"Hello": "World" }
 
 
@@ -101,14 +108,24 @@ async def read_item(item_id: str, q: Optional[str] = None):
     path_pdf = paths[str(item_id)]['path_pdf'] if str(item_id) in paths else paths[str(0)]['path_pdf']
     path_txt = paths[str(item_id)]['path_txt'] if str(item_id) in paths else paths[str(0)]['path_txt']
 
+    # print(path_pdf)
+    # print(path_txt)
+
     # Query db for records
     dbjson = {}
     with open(os.environ.get('JSONDBPATH'), mode="r", encoding="utf-8") as f:
         dbjson = json.loads(f.read())
 
+    print(json.dumps(dbjson))
+    print()
+    print(str(item_id))
+
     if str(item_id) in dbjson:
         path_pdf = dbjson[str(item_id)]['path_pdf']
         path_txt = dbjson[str(item_id)]['path_txt']
+
+        print(path_pdf)
+        print(path_txt)
 
 
     # Meta of file
